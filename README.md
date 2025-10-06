@@ -14,3 +14,4 @@
 DB：PostgreSQL, Redis
 
 # アーキテクチャ図
+![image](https://drive.google.com/file/d/1fHKpPopybOsDs_1_8zAbjLY7fb4a2_6j/view?usp=drive_link)
