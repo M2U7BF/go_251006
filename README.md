@@ -9,8 +9,8 @@
 * go、TypeScriptの練習
 
 # 技術スタック
-フロント：TypeScript
-サーバー：Go（Gin / Echo）
+フロント：TypeScript（Next.js）
+サーバー：Go（Gin）
 DB：PostgreSQL, Redis
 
 # アーキテクチャ図
