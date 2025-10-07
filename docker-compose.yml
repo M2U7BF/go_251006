@@ -1,8 +1,9 @@
 services:
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
     container_name: nextjs_app
-    command: sh -c "npm run dev"
+    # command: "npm run dev"
     ports:
       - "3000:3000"
     environment:
