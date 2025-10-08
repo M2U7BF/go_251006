@@ -6,31 +6,32 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type SearchForm struct {
-	Query string `form:"query" json:"query"`
-	Limit int    `form:"limit" json:"limit"`
+type SearchRequest struct {
+    Address              string `json:"address"`
+    LLimitTravelExpenses string `json:"l_limit_travel_expenses"`
+    ULimitTravelExpenses string `json:"u_limit_travel_expenses"`
 }
 
 func main() {
 	router := gin.Default()
 
 	router.POST("/search", func(c *gin.Context) {
-		var form SearchForm
+		var req SearchRequest
 
 		// フォームデータをバインド
-		if err := c.ShouldBind(&form); err != nil {
+		if err := c.ShouldBind(&req); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		fmt.Println("受け取ったフォーム:", form)
-		result := "検索結果: " + form.Query
+		fmt.Printf("受け取ったフォーム: %s,%s,%s\n", req.Address, req.LLimitTravelExpenses, req.ULimitTravelExpenses)
+		// result := "検索結果: " + req.Address
 
 		// レスポンスを返す
 		c.JSON(http.StatusOK, gin.H{
-			"query":  form.Query,
-			"limit":  form.Limit,
-			"result": result,
+			"address":  req.Address,
+			"l_limit_travel_expenses":  req.LLimitTravelExpenses,
+			"u_limit_travel_expenses":  req.ULimitTravelExpenses,
 		})
 	})
 

@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
+  console.log(`body:${JSON.stringify(body)}`);
 
   const response = await fetch(`${API_BASE}/search`, {
     method: "POST",
