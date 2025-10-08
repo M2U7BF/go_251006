@@ -2,7 +2,7 @@ package search
 
 import (
 	"fmt"
-	google "go_251006/internal/api/google"
+	"go_251006/internal/api/google"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -24,14 +24,16 @@ func SearchHandler(c *gin.Context) {
 	}
 
 	// geocodingAPI呼び出し
-	geo, err := google.FetchGeocode(req.Address, google.GetGoogleMapsAPIKey())
-	if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-	}
+	// geo, err := google.FetchGeocode(req.Address)
+	// if err != nil {
+	// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	// 		return
+	// }
+	google.FetchGooglePlacesTextSearch(req.Address + " 最寄り駅")
 
 	fmt.Printf("受け取ったフォーム: %s,%s,%s\n", req.Address, req.LLimitTravelExpenses, req.ULimitTravelExpenses)
-	fmt.Printf("lat:%g,lan:%g\n", geo.Results[0].Geometry.Location.Lat, geo.Results[0].Geometry.Location.Lng)
+	// fmt.Printf("lat:%g,lan:%g\n", geo.Results[0].Geometry.Location.Lat, geo.Results[0].Geometry.Location.Lng)
+	// fmt.Printf("lat:%g,lan:%g\n", gpl.Place.displayName)
 	// result := "検索結果: " + req.Address
 
 	// レスポンスを返す

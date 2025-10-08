@@ -1,21 +1,12 @@
 package google
 
 import (
-	"log"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
-	"os"
-
-	"github.com/gin-gonic/gin"
 )
-
-type GeocodingRequest struct {
-	Latitude   string `json:"latitude"`
-	Longtitude string `json:"longtitude"`
-}
 
 // Google Geocoding APIのレスポンス全体
 type GeocodeResponse struct {
@@ -56,13 +47,13 @@ type Viewport struct {
 	Southwest LatLng `json:"southwest"`
 }
 
-func FetchGeocode(address, apiKey string) (*GeocodeResponse, error) {
+func FetchGeocode(address string) (*GeocodeResponse, error) {
 	endpoint := "https://maps.googleapis.com/maps/api/geocode/json"
 
 	// URLエンコード
 	encodedAddr := url.QueryEscape(address)
 
-	fullURL := fmt.Sprintf("%s?address=%s&key=%s", endpoint, encodedAddr, apiKey)
+	fullURL := fmt.Sprintf("%s?address=%s&key=%s", endpoint, encodedAddr, GetGoogleMapsAPIKey())
 
 	// HTTP GETリクエスト
 	resp, err := http.Get(fullURL)
@@ -88,31 +79,4 @@ func FetchGeocode(address, apiKey string) (*GeocodeResponse, error) {
 	}
 
 	return &result, nil
-}
-
-func GetGoogleMapsAPIKey() string {
-	apiKey := os.Getenv("GOOGLE_MAPS_API_KEY")
-	if apiKey == "" {
-		log.Fatal("GOOGLE_MAPS_API_KEY not set")
-		return ""
-	}
-	return apiKey
-}
-
-func GetGeocodeHandler(c *gin.Context) {
-	address := c.Query("address")
-	if address == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "address parameter is required"})
-		return
-	}
-
-	// Google API呼び出し
-	geo, err := FetchGeocode(address, GetGoogleMapsAPIKey())
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	// 結果をそのまま返す
-	c.JSON(http.StatusOK, geo)
 }
