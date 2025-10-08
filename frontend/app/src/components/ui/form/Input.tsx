@@ -2,6 +2,7 @@ import React from "react";
 
 type InputProps = {
   type?: string;
+  name: string;
   value?: string;
   placeholder?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -10,6 +11,7 @@ type InputProps = {
 
 export const Input: React.FC<InputProps> = ({
   type = "text",
+  name,
   value,
   placeholder,
   onChange,
@@ -18,6 +20,7 @@ export const Input: React.FC<InputProps> = ({
   return (
     <input
       type={type}
+      name={name}
       value={value}
       placeholder={placeholder}
       onChange={onChange}

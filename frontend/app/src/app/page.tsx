@@ -17,7 +17,7 @@ export default function Home() {
   const handleSubmit = async () => {
     try {
       const res = await fetchMapInfo(form);
-      setMessage(`APIコール完了`);
+      setMessage(`APIコール完了, res:${JSON.stringify(res)}`);
     } catch (err) {
       console.error(err);
       setMessage(`APIコールが失敗しました`);
@@ -30,6 +30,7 @@ export default function Home() {
         住所：
         <Input
           type='text'
+          name='address'
           placeholder='住所を入力'
           onChange={handleChange}
         />
@@ -38,6 +39,7 @@ export default function Home() {
         金額：
         <Input
           type='number'
+          name='l_limit_travel_expenses'
           placeholder='下限値'
           className='w-20'
           onChange={handleChange}
@@ -45,6 +47,7 @@ export default function Home() {
         ~
         <Input
           type='number'
+          name='u_limit_travel_expenses'
           placeholder='上限値'
           className='w-20'
           onChange={handleChange}
