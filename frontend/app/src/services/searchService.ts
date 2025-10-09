@@ -8,7 +8,8 @@ export async function fetchMapInfo(data: searchFormData) {
   });
 
   if (!res.ok) {
-    throw new Error("Search API failed");
+    const message = await res.text();
+    throw new Error(`Search API failed:${message}`);
   }
 
   return await res.json();

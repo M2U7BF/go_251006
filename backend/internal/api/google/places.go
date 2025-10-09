@@ -9,16 +9,22 @@ import (
 	"strings"
 )
 
-// APIレスポンス用の構造体
-type PlacesResponse struct {
-	Places []struct {
-		DisplayName struct {
-			Text string `json:"text"`
-		} `json:"displayName"`
-	} `json:"places"`
+type Places []struct {
+	DisplayName struct {
+		Text string `json:"text"`
+	} `json:"displayName"`
+	Location struct {
+		Latitude  float64 `json:"latitude"`
+		Longitude float64 `json:"longitude"`
+	} `json:"location"`
 }
 
-func FetchGooglePlacesTextSearch(searchText string) []string {
+// APIレスポンス用の構造体
+type PlacesResponse struct {
+	Places Places `json:"places"`
+}
+
+func FetchGooglePlacesTextSearch(searchText string) Places {
 	url := "https://places.googleapis.com/v1/places:searchText"
 
 	// リクエストボディ
@@ -38,7 +44,7 @@ func FetchGooglePlacesTextSearch(searchText string) []string {
 
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Goog-Api-Key", GetGoogleMapsAPIKey())
-	req.Header.Set("X-Goog-FieldMask", "places.displayName.text") // 取得したいフィールドのみ
+	req.Header.Set("X-Goog-FieldMask", "places.displayName.text,places.location") // 取得したいフィールドのみ
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -54,11 +60,11 @@ func FetchGooglePlacesTextSearch(searchText string) []string {
 		panic(err)
 	}
 
-	var station_names []string
+	var places Places
 	for i := range placesResp.Places {
 		if strings.Contains(placesResp.Places[i].DisplayName.Text, "駅") {
-			station_names = append(station_names, placesResp.Places[i].DisplayName.Text)
+			places = append(places, placesResp.Places[i])
 		}
 	}
-	return station_names
+	return places
 }

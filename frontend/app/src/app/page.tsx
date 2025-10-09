@@ -20,7 +20,7 @@ export default function Home() {
       setMessage(`APIコール完了, res:${JSON.stringify(res)}`);
     } catch (err) {
       console.error(err);
-      setMessage(`APIコールが失敗しました`);
+      setMessage(`APIコールが失敗しました:${err}`);
     }
   };
 

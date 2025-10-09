@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"os"
 	"net/http"
 	"net/url"
 )
@@ -48,12 +49,8 @@ type Viewport struct {
 }
 
 func FetchGeocode(address string) (*GeocodeResponse, error) {
-	endpoint := "https://maps.googleapis.com/maps/api/geocode/json"
-
-	// URLエンコード
-	encodedAddr := url.QueryEscape(address)
-
-	fullURL := fmt.Sprintf("%s?address=%s&key=%s", endpoint, encodedAddr, GetGoogleMapsAPIKey())
+	// apiコールのurl作成
+	fullURL := fmt.Sprintf("%s?address=%s&key=%s", os.Getenv("GOOGLE_GEOCODE_API_ENDPOINT"), url.QueryEscape(address), GetGoogleMapsAPIKey())
 
 	// HTTP GETリクエスト
 	resp, err := http.Get(fullURL)
