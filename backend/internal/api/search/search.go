@@ -29,9 +29,11 @@ func SearchHandler(c *gin.Context) {
 	// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	// 		return
 	// }
-	google.FetchGooglePlacesTextSearch(req.Address + " 最寄り駅")
+	var station_names []string
+	station_names = google.FetchGooglePlacesTextSearch(req.Address + " 最寄り駅")
 
 	fmt.Printf("受け取ったフォーム: %s,%s,%s\n", req.Address, req.LLimitTravelExpenses, req.ULimitTravelExpenses)
+	fmt.Println(station_names)
 	// fmt.Printf("lat:%g,lan:%g\n", geo.Results[0].Geometry.Location.Lat, geo.Results[0].Geometry.Location.Lng)
 	// fmt.Printf("lat:%g,lan:%g\n", gpl.Place.displayName)
 	// result := "検索結果: " + req.Address

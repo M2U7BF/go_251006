@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 )
 
 // APIレスポンス用の構造体
@@ -17,16 +18,18 @@ type PlacesResponse struct {
 	} `json:"places"`
 }
 
-func FetchGooglePlacesTextSearch(searchText string) {
+func FetchGooglePlacesTextSearch(searchText string) []string {
 	url := "https://places.googleapis.com/v1/places:searchText"
 
 	// リクエストボディ
 	fmt.Printf("searchText:%s\n", searchText)
 	requestBody := map[string]string{
-		"textQuery": searchText,
+		"textQuery":    searchText,
+		"languageCode": "ja",
 	}
 
 	bodyBytes, _ := json.Marshal(requestBody)
+	fmt.Printf("bodyBytes:%s\n", string(bodyBytes))
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(bodyBytes))
 	if err != nil {
@@ -45,14 +48,17 @@ func FetchGooglePlacesTextSearch(searchText string) {
 	defer resp.Body.Close()
 
 	respBody, _ := io.ReadAll(resp.Body)
-	fmt.Printf("respBody:%s\n", respBody)
 
 	var placesResp PlacesResponse
 	if err := json.Unmarshal(respBody, &placesResp); err != nil {
 		panic(err)
 	}
 
-	for i, place := range placesResp.Places {
-		fmt.Printf("Place %d: %s\n", i, place.DisplayName.Text)
+	var station_names []string
+	for i := range placesResp.Places {
+		if strings.Contains(placesResp.Places[i].DisplayName.Text, "駅") {
+			station_names = append(station_names, placesResp.Places[i].DisplayName.Text)
+		}
 	}
+	return station_names
 }
